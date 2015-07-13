@@ -18,6 +18,7 @@ import ru.shevchenko.tictactoe.game.GameManager;
 import ru.shevchenko.tictactoe.game.OnGameStateChangeListener;
 import ru.shevchenko.tictactoe.model.Cell;
 import ru.shevchenko.tictactoe.model.CellState;
+import ru.shevchenko.tictactoe.model.GameStatus;
 import ru.shevchenko.tictactoe.model.Line;
 
 
@@ -60,8 +61,8 @@ public class GameActivity extends Activity {
             }
 
             @Override
-            public void win(CellState state, Line line) {
-                Toast.makeText(GameActivity.this, state + " wins", Toast.LENGTH_LONG).show();
+            public void win(GameStatus state, Line line) {
+                Toast.makeText(GameActivity.this, "" + state, Toast.LENGTH_LONG).show();
             }
 
             @Override

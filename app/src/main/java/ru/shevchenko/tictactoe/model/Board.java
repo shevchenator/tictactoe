@@ -23,6 +23,10 @@ public class Board {
         }
     }
 
+    public Board(Map<Cell, CellState> cellMap) {
+        this.cellMap = cellMap;
+    }
+
     public boolean place(CellState state, Cell cell) {
         if (state != CellState.BLANK) {
             cellMap.put(cell, state);
@@ -32,10 +36,7 @@ public class Board {
     }
 
     public CellState getCellState(Cell cell) {
-        if (cellMap.containsKey(cell)) {
-            return cellMap.get(cell);
-        }
-        return CellState.BLANK;
+        return cellMap.get(cell);
     }
 
     public Set<Cell> getAvailablePlaces() {
@@ -62,5 +63,25 @@ public class Board {
         return !cellStates.contains(CellState.BLANK) &&
                 cellStates.contains(CellState.X) &&
                 cellStates.contains(CellState.O);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Board board = (Board) o;
+
+        return !(cellMap != null ? !cellMap.equals(board.cellMap) : board.cellMap != null);
+
+    }
+
+    @Override
+    public int hashCode() {
+        return cellMap != null ? cellMap.hashCode() : 0;
+    }
+
+    public Board clone() {
+        return new Board(new HashMap<>(this.cellMap));
     }
 }

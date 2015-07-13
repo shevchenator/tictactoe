@@ -2,6 +2,7 @@ package ru.shevchenko.tictactoe.game;
 
 import ru.shevchenko.tictactoe.model.Cell;
 import ru.shevchenko.tictactoe.model.CellState;
+import ru.shevchenko.tictactoe.model.GameStatus;
 import ru.shevchenko.tictactoe.model.Line;
 
 /**
@@ -9,6 +10,6 @@ import ru.shevchenko.tictactoe.model.Line;
  */
 public interface OnGameStateChangeListener {
     void onTurnMade(CellState state, Cell cell);
-    void win(CellState state, Line line);
+    void win(GameStatus status, Line line);
     void draw();
 }
