@@ -54,30 +54,42 @@ public class GameActivity extends Activity {
 
         gameManager = new GameManager(new OnGameStateChangeListener() {
             @Override
-            public void onTurnMade(CellState state, Cell cell) {
-                TextView currentCellView = ButterKnife.findById(GameActivity.this, CellToViewAdapter.cellToView(cell));
+            public void onTurnMade(final CellState state, final Cell cell) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        TextView currentCellView = ButterKnife.findById(GameActivity.this, CellToViewAdapter.cellToView(cell));
 
-                if (state.equals(CellState.X)) {
-                    currentCellView.setText("X");
-                    gameStatus.setText("O turn...");
-                } else if (state.equals(CellState.O)) {
-                    currentCellView.setText("O");
-                    gameStatus.setText("X turn...");
-                }
+                        if (state.equals(CellState.X)) {
+                            currentCellView.setText("X");
+                            gameStatus.setText("O turn...");
+                        } else if (state.equals(CellState.O)) {
+                            currentCellView.setText("O");
+                            gameStatus.setText("X turn...");
+                        }
+                        showMoveStatus(state);
+                    }
+                });
             }
 
             @Override
-            public void win(GameStatus state, Line line) {
-                if (state.equals(GameStatus.X_WIN)) {
-                    gameStatus.setText("X player wins");
-                } else {
-                    gameStatus.setText("O player wins");
-                }
+            public void win(final GameStatus state, Line line) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        showWinnerStatus(state);
+                    }
+                });
             }
 
             @Override
             public void draw() {
-                gameStatus.setText("Draw");
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        gameStatus.setText("Draw");
+                    }
+                });
             }
         });
     }
@@ -128,6 +140,38 @@ public class GameActivity extends Activity {
 
             clearBoard();
             gameManager.startNewGame(GameMode.VS_AI);
+        }
+    }
+
+    private void showMoveStatus(CellState madeMoveState) {
+        if (gameManager.getGameMode().equals(GameMode.VS_AI)) {
+            if (madeMoveState.equals(gameManager.getAiSeed())) {
+                gameStatus.setText("Your turn...");
+            } else {
+                gameStatus.setText("AI turn...");
+            }
+        } else {
+            if (madeMoveState.equals(CellState.X)) {
+                gameStatus.setText("O player turn...");
+            } else if (madeMoveState.equals(CellState.O)) {
+                gameStatus.setText("X player turn...");
+            }
+        }
+    }
+
+    private void showWinnerStatus(GameStatus winner) {
+        if (gameManager.getGameMode().equals(GameMode.VS_AI)) {
+            if (winner.toWinnerState().equals(gameManager.getAiSeed())) {
+                gameStatus.setText("AI wins!");
+            } else {
+                gameStatus.setText("You win! No way!");
+            }
+        } else {
+            if (winner.equals(GameStatus.X_WIN)) {
+                gameStatus.setText("X player wins!");
+            } else {
+                gameStatus.setText("O player wins!");
+            }
         }
     }
 

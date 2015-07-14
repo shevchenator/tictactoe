@@ -16,9 +16,9 @@ public class GameManager {
     private GameStatus currentStatus;
     private GameMode gameMode;
     private CellState previousTurnState = CellState.O;
+    private boolean areMovesBlocked = false;
 
     private AiPlayer aiPlayer;
-
     private OnGameStateChangeListener gameStateChangeListener;
 
     public GameManager(OnGameStateChangeListener gameStateChangeListener) {
@@ -32,14 +32,18 @@ public class GameManager {
         this.board = new Board();
         this.currentStatus = GameStatus.NOT_STARTED;
         this.previousTurnState = CellState.O;
+        this.areMovesBlocked = false;
         this.statusProcessor = new GameStatusProcessor(board);
         if (gameMode.equals(GameMode.VS_AI)) {
             this.aiPlayer = new AiPlayer(CellState.O);
+        } else {
+            this.aiPlayer = null;
         }
     }
 
     public void makeMove(Cell cell) {
         if (!isGameOver() &&
+                !areMovesBlocked &&
                 board.getCellState(cell).equals(CellState.BLANK)) {
             if (previousTurnState.equals(CellState.O) && board.place(CellState.X, cell)) {
                 gameStateChangeListener.onTurnMade(CellState.X, cell);
@@ -53,14 +57,26 @@ public class GameManager {
             reactOnStatusChange();
 
             if (aiPlayer != null && !isGameOver() && !previousTurnState.equals(aiPlayer.getAiSeed())) {
-                makeMove(aiPlayer.makeMove(board));
+                areMovesBlocked = true;
+                aiPlayer.chooseMove(board, new AiPlayer.OnMoveChooseListener() {
+                    @Override
+                    public void onChoose(Cell cell) {
+                        areMovesBlocked = false;
+                        makeMove(cell);
+                    }
+                });
             }
         }
     }
 
     public void startAi() {
         this.aiPlayer = new AiPlayer(CellState.X);
-        makeMove(aiPlayer.makeMove(board));
+        aiPlayer.chooseMove(board, new AiPlayer.OnMoveChooseListener() {
+            @Override
+            public void onChoose(Cell cell) {
+                makeMove(cell);
+            }
+        });
     }
 
     private boolean isGameOver() {
@@ -85,5 +101,9 @@ public class GameManager {
 
     public GameMode getGameMode() {
         return gameMode;
+    }
+
+    public CellState getAiSeed() {
+        return aiPlayer.getAiSeed();
     }
 }

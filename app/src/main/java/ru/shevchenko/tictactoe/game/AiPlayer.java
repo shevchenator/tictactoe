@@ -15,6 +15,12 @@ import ru.shevchenko.tictactoe.model.GameStatusProcessor;
  */
 public class AiPlayer {
 
+    public interface OnMoveChooseListener {
+        void onChoose(Cell cell);
+    }
+
+    private static final int WIN_SCORE = 10;
+
     private CellState aiSeed;
     private CellState opponentSeed;
     private Cell choice;
@@ -29,13 +35,23 @@ public class AiPlayer {
         }
     }
 
-    public Cell makeMove(Board board) {
-        if (board.isBlank() || board.getAvailablePlaces().size() == 8) {
-            return makeFistMove(board);
+    public void chooseMove(final Board board, final OnMoveChooseListener listener) {
+        if (listener == null) {
+            return;
         }
 
-        minMax(board.clone(), 0, aiSeed, -11, 11);
-        return choice;
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                if (board.isBlank() || board.getAvailablePlaces().size() == 8) {
+                    listener.onChoose(makeFistMove(board));
+                    return;
+                }
+
+                minMax(board, 0, aiSeed, -AiPlayer.WIN_SCORE - 1, AiPlayer.WIN_SCORE + 1);
+                listener.onChoose(choice);
+            }
+        }).start();
     }
 
     private int minMax(Board board, int depth, CellState currentMove, int alpha, int beta) {
@@ -45,9 +61,10 @@ public class AiPlayer {
 
         Cell bestMove = null;
         for (Cell cell : board.getAvailablePlaces()) {
-            Board clonedBoard = board.clone();
-            clonedBoard.place(currentMove, cell);
-            int score = minMax(clonedBoard, depth + 1, currentMove.equals(aiSeed) ? opponentSeed : aiSeed, alpha, beta);
+            board.place(currentMove, cell);
+            int score = minMax(board, depth + 1, currentMove.equals(aiSeed) ? opponentSeed : aiSeed, alpha, beta);
+            board.clearCell(cell);
+
             if (currentMove.equals(aiSeed) && score > alpha) {
                 alpha = score;
                 bestMove = cell;
@@ -83,9 +100,9 @@ public class AiPlayer {
             CellState winnerState = statusProcessor.getWinnerState();
 
             if (winnerState.equals(aiSeed)) {
-                return 10 - depth;
+                return AiPlayer.WIN_SCORE - depth;
             } else {
-                return depth - 10;
+                return depth - AiPlayer.WIN_SCORE;
             }
         }
     }
