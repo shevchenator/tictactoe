@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v7.widget.GridLayout;
 import android.view.View;
 import android.view.ViewTreeObserver;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -58,13 +59,13 @@ public class GameActivity extends Activity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        TextView currentCellView = ButterKnife.findById(GameActivity.this, CellToViewAdapter.cellToView(cell));
+                        ImageView currentCellView = ButterKnife.findById(GameActivity.this, CellToViewAdapter.cellToView(cell));
 
                         if (state.equals(CellState.X)) {
-                            currentCellView.setText("X");
+                            currentCellView.setImageResource(R.drawable.x_normal);
                             gameStatus.setText("O turn...");
                         } else if (state.equals(CellState.O)) {
-                            currentCellView.setText("O");
+                            currentCellView.setImageResource(R.drawable.o_normal);
                             gameStatus.setText("X turn...");
                         }
                         showMoveStatus(state);
@@ -73,11 +74,12 @@ public class GameActivity extends Activity {
             }
 
             @Override
-            public void win(final GameStatus state, Line line) {
+            public void win(final GameStatus state, final Line line) {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         showWinnerStatus(state);
+                        markWinningLine(state, line);
                     }
                 });
             }
@@ -175,10 +177,18 @@ public class GameActivity extends Activity {
         }
     }
 
+    private void markWinningLine(GameStatus status, Line line) {
+        int imgRes = status.equals(GameStatus.X_WIN) ? R.drawable.x_win : R.drawable.o_win;
+        for (Cell cell : line.getCellRow()) {
+            ImageView currentCellView = ButterKnife.findById(GameActivity.this, CellToViewAdapter.cellToView(cell));
+            currentCellView.setImageResource(imgRes);
+        }
+    }
+
     private void clearBoard() {
         for (int i = 0; i < boardLayout.getChildCount(); i++) {
-            TextView cell = (TextView) boardLayout.getChildAt(i);
-            cell.setText("");
+            ImageView cell = (ImageView) boardLayout.getChildAt(i);
+            cell.setImageResource(0);
         }
     }
 
@@ -194,7 +204,7 @@ public class GameActivity extends Activity {
         }
 
         for (int i = 0; i < boardLayout.getChildCount(); i++) {
-            TextView cell = (TextView) boardLayout.getChildAt(i);
+            ImageView cell = (ImageView) boardLayout.getChildAt(i);
             GridLayout.LayoutParams params = (GridLayout.LayoutParams) cell.getLayoutParams();
             params.height = cellDimension - params.topMargin - params.bottomMargin;
             params.width = cellDimension - params.leftMargin - params.rightMargin;

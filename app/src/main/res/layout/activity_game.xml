@@ -17,85 +17,85 @@
         app:rowCount="3"
         app:columnCount="3">
 
-        <TextView
+        <ImageView
             android:id="@+id/game_cell_1_1"
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:layout_margin="@dimen/cell_margin"
-            android:gravity="center"
-            android:textSize="40sp"
+            android:padding="@dimen/cell_padding"
+            android:scaleType="fitXY"
             android:background="@android:color/white"/>
 
-        <TextView
+        <ImageView
             android:id="@+id/game_cell_1_2"
             android:layout_width="100dp"
             android:layout_height="100dp"
-            android:gravity="center"
             android:layout_margin="@dimen/cell_margin"
-            android:textSize="40sp"
+            android:padding="@dimen/cell_padding"
+            android:scaleType="fitXY"
             android:background="@android:color/white"/>
 
-        <TextView
+        <ImageView
             android:id="@+id/game_cell_1_3"
             android:layout_width="100dp"
             android:layout_height="100dp"
-            android:gravity="center"
             android:layout_margin="@dimen/cell_margin"
-            android:textSize="40sp"
+            android:padding="@dimen/cell_padding"
+            android:scaleType="fitXY"
             android:background="@android:color/white"/>
 
-        <TextView
+        <ImageView
             android:id="@+id/game_cell_2_1"
             android:layout_width="100dp"
             android:layout_height="100dp"
-            android:gravity="center"
             android:layout_margin="@dimen/cell_margin"
-            android:textSize="40sp"
+            android:padding="@dimen/cell_padding"
+            android:scaleType="fitXY"
             android:background="@android:color/white"/>
 
-        <TextView
+        <ImageView
             android:id="@+id/game_cell_2_2"
             android:layout_width="100dp"
             android:layout_height="100dp"
-            android:gravity="center"
             android:layout_margin="@dimen/cell_margin"
-            android:textSize="40sp"
+            android:padding="@dimen/cell_padding"
+            android:scaleType="fitXY"
             android:background="@android:color/white"/>
 
-        <TextView
+        <ImageView
             android:id="@+id/game_cell_2_3"
             android:layout_width="100dp"
             android:layout_height="100dp"
-            android:gravity="center"
             android:layout_margin="@dimen/cell_margin"
-            android:textSize="40sp"
+            android:padding="@dimen/cell_padding"
+            android:scaleType="fitXY"
             android:background="@android:color/white"/>
 
-        <TextView
+        <ImageView
             android:id="@+id/game_cell_3_1"
             android:layout_width="100dp"
             android:layout_height="100dp"
-            android:gravity="center"
             android:layout_margin="@dimen/cell_margin"
-            android:textSize="40sp"
+            android:padding="@dimen/cell_padding"
+            android:scaleType="fitXY"
             android:background="@android:color/white"/>
 
-        <TextView
+        <ImageView
             android:id="@+id/game_cell_3_2"
             android:layout_width="100dp"
             android:layout_height="100dp"
-            android:gravity="center"
             android:layout_margin="@dimen/cell_margin"
-            android:textSize="40sp"
+            android:padding="@dimen/cell_padding"
+            android:scaleType="fitXY"
             android:background="@android:color/white"/>
 
-        <TextView
+        <ImageView
             android:id="@+id/game_cell_3_3"
             android:layout_width="100dp"
             android:layout_height="100dp"
-            android:gravity="center"
             android:layout_margin="@dimen/cell_margin"
-            android:textSize="40sp"
+            android:padding="@dimen/cell_padding"
+            android:scaleType="fitXY"
             android:background="@android:color/white"/>
 
 
