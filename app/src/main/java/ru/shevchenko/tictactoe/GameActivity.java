@@ -22,7 +22,9 @@ import ru.shevchenko.tictactoe.model.GameMode;
 import ru.shevchenko.tictactoe.model.GameStatus;
 import ru.shevchenko.tictactoe.model.Line;
 
-
+/**
+ * @author Vladimir Shevchenko shevchen55@gmail.com 12/07/15.
+ */
 public class GameActivity extends Activity {
 
     @Bind(R.id.game_base_layout)

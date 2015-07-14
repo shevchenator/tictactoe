@@ -1,0 +1,156 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/game_base_layout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingLeft="@dimen/activity_horizontal_margin"
+                android:paddingRight="@dimen/activity_horizontal_margin"
+                android:paddingTop="@dimen/activity_vertical_margin"
+                android:paddingBottom="@dimen/activity_vertical_margin"
+                android:background="@color/background">
+
+    <android.support.v7.widget.GridLayout
+        android:id="@+id/game_board_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        app:rowCount="3"
+        app:columnCount="3">
+
+        <ImageView
+            android:id="@+id/game_cell_1_1"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_margin="@dimen/cell_margin"
+            android:padding="@dimen/cell_padding"
+            android:scaleType="fitXY"
+            android:background="@android:color/white"/>
+
+        <ImageView
+            android:id="@+id/game_cell_1_2"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_margin="@dimen/cell_margin"
+            android:padding="@dimen/cell_padding"
+            android:scaleType="fitXY"
+            android:background="@android:color/white"/>
+
+        <ImageView
+            android:id="@+id/game_cell_1_3"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_margin="@dimen/cell_margin"
+            android:padding="@dimen/cell_padding"
+            android:scaleType="fitXY"
+            android:background="@android:color/white"/>
+
+        <ImageView
+            android:id="@+id/game_cell_2_1"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_margin="@dimen/cell_margin"
+            android:padding="@dimen/cell_padding"
+            android:scaleType="fitXY"
+            android:background="@android:color/white"/>
+
+        <ImageView
+            android:id="@+id/game_cell_2_2"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_margin="@dimen/cell_margin"
+            android:padding="@dimen/cell_padding"
+            android:scaleType="fitXY"
+            android:background="@android:color/white"/>
+
+        <ImageView
+            android:id="@+id/game_cell_2_3"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_margin="@dimen/cell_margin"
+            android:padding="@dimen/cell_padding"
+            android:scaleType="fitXY"
+            android:background="@android:color/white"/>
+
+        <ImageView
+            android:id="@+id/game_cell_3_1"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_margin="@dimen/cell_margin"
+            android:padding="@dimen/cell_padding"
+            android:scaleType="fitXY"
+            android:background="@android:color/white"/>
+
+        <ImageView
+            android:id="@+id/game_cell_3_2"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_margin="@dimen/cell_margin"
+            android:padding="@dimen/cell_padding"
+            android:scaleType="fitXY"
+            android:background="@android:color/white"/>
+
+        <ImageView
+            android:id="@+id/game_cell_3_3"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_margin="@dimen/cell_margin"
+            android:padding="@dimen/cell_padding"
+            android:scaleType="fitXY"
+            android:background="@android:color/white"/>
+
+
+    </android.support.v7.widget.GridLayout>
+
+    <TextView
+        android:id="@+id/game_status"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_toLeftOf="@+id/game_board_layout"
+        android:layout_toStartOf="@+id/game_board_layout"
+        android:layout_centerVertical="true"
+        style="@style/StatusText"/>
+
+    <TextView
+        android:id="@+id/game_new"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
+        android:drawableTop="@drawable/restart"
+        android:drawablePadding="5dp"
+        android:text="@string/restart"
+        style="@style/ButtonText"/>
+
+    <TextView
+        android:id="@+id/game_ai_start"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:drawableTop="@drawable/r2d2"
+        android:drawablePadding="5dp"
+        android:text="@string/let_ai_start"
+        android:visibility="gone"
+        style="@style/ButtonText"/>
+
+    <TextView
+        android:id="@+id/game_change_mode"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:drawableTop="@drawable/r2d2"
+        android:drawablePadding="5dp"
+        android:text="@string/pvai"
+        android:tag="pvai"
+        style="@style/ButtonText"/>
+    
+</RelativeLayout>
