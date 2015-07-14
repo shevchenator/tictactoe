@@ -1,7 +1,9 @@
 package ru.shevchenko.tictactoe.model;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -35,12 +37,16 @@ public class Board {
         return false;
     }
 
+    public void clearCell(Cell cell) {
+        cellMap.put(cell, CellState.BLANK);
+    }
+
     public CellState getCellState(Cell cell) {
         return cellMap.get(cell);
     }
 
-    public Set<Cell> getAvailablePlaces() {
-        Set<Cell> cellSet = new HashSet<>();
+    public List<Cell> getAvailablePlaces() {
+        List<Cell> cellSet = new ArrayList<>();
         for (Cell cell : cellMap.keySet()) {
             if (getCellState(cell) == CellState.BLANK) {
                 cellSet.add(cell);

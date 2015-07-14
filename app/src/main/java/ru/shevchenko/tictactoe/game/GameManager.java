@@ -15,10 +15,13 @@ public class GameManager {
     private GameStatus currentStatus;
     private CellState previousTurnState = CellState.O;
 
+    private AiPlayer aiPlayer;
+
     private OnGameStateChangeListener gameStateChangeListener;
 
     public GameManager(OnGameStateChangeListener gameStateChangeListener) {
         this.gameStateChangeListener = gameStateChangeListener;
+        this.aiPlayer = new AiPlayer(CellState.O);
         startNewGame();
         this.statusProcessor = new GameStatusProcessor(board);
     }
@@ -28,9 +31,10 @@ public class GameManager {
         this.currentStatus = GameStatus.NOT_STARTED;
         this.previousTurnState = CellState.O;
         this.statusProcessor = new GameStatusProcessor(board);
+        this.aiPlayer = new AiPlayer(CellState.O);
     }
 
-    public Board makeMove(Cell cell) {
+    public void makeMove(Cell cell) {
         if (!isGameOver() &&
                 board.getCellState(cell).equals(CellState.BLANK)) {
             if (previousTurnState.equals(CellState.O) && board.place(CellState.X, cell)) {
@@ -43,9 +47,16 @@ public class GameManager {
 
             currentStatus = statusProcessor.checkGameStatus();
             reactOnStatusChange();
-        }
 
-        return board;
+            if (!previousTurnState.equals(aiPlayer.getAiSeed()) && !isGameOver()) {
+                makeMove(aiPlayer.makeMove(board).first);
+            }
+        }
+    }
+
+    public void startAi() {
+        this.aiPlayer = new AiPlayer(CellState.X);
+        makeMove(aiPlayer.makeMove(board).first);
     }
 
     private boolean isGameOver() {

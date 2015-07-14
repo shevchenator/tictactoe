@@ -96,6 +96,11 @@ public class GameActivity extends Activity {
         clearBoard();
     }
 
+    @OnClick(R.id.game_ai_start)
+    void onAiStatClick(View view) {
+        gameManager.startAi();
+    }
+
     private void clearBoard() {
         for (int i = 0; i < boardLayout.getChildCount(); i++) {
             TextView cell = (TextView) boardLayout.getChildAt(i);
