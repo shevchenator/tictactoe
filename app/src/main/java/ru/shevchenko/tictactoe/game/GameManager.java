@@ -3,6 +3,7 @@ package ru.shevchenko.tictactoe.game;
 import ru.shevchenko.tictactoe.model.Board;
 import ru.shevchenko.tictactoe.model.Cell;
 import ru.shevchenko.tictactoe.model.CellState;
+import ru.shevchenko.tictactoe.model.GameMode;
 import ru.shevchenko.tictactoe.model.GameStatusProcessor;
 import ru.shevchenko.tictactoe.model.GameStatus;
 
@@ -13,6 +14,7 @@ public class GameManager {
     private Board board;
     private GameStatusProcessor statusProcessor;
     private GameStatus currentStatus;
+    private GameMode gameMode;
     private CellState previousTurnState = CellState.O;
 
     private AiPlayer aiPlayer;
@@ -21,17 +23,19 @@ public class GameManager {
 
     public GameManager(OnGameStateChangeListener gameStateChangeListener) {
         this.gameStateChangeListener = gameStateChangeListener;
-        this.aiPlayer = new AiPlayer(CellState.O);
-        startNewGame();
+        startNewGame(GameMode.PVP);
         this.statusProcessor = new GameStatusProcessor(board);
     }
 
-    public void startNewGame() {
+    public void startNewGame(GameMode gameMode) {
+        this.gameMode = gameMode;
         this.board = new Board();
         this.currentStatus = GameStatus.NOT_STARTED;
         this.previousTurnState = CellState.O;
         this.statusProcessor = new GameStatusProcessor(board);
-        this.aiPlayer = new AiPlayer(CellState.O);
+        if (gameMode.equals(GameMode.VS_AI)) {
+            this.aiPlayer = new AiPlayer(CellState.O);
+        }
     }
 
     public void makeMove(Cell cell) {
@@ -48,7 +52,7 @@ public class GameManager {
             currentStatus = statusProcessor.checkGameStatus();
             reactOnStatusChange();
 
-            if (!previousTurnState.equals(aiPlayer.getAiSeed()) && !isGameOver()) {
+            if (aiPlayer != null && !isGameOver() && !previousTurnState.equals(aiPlayer.getAiSeed())) {
                 makeMove(aiPlayer.makeMove(board));
             }
         }
@@ -77,5 +81,9 @@ public class GameManager {
                 gameStateChangeListener.win(GameStatus.O_WIN, statusProcessor.getWinningLine());
                 break;
         }
+    }
+
+    public GameMode getGameMode() {
+        return gameMode;
     }
 }

@@ -8,7 +8,6 @@ import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -18,6 +17,7 @@ import ru.shevchenko.tictactoe.game.GameManager;
 import ru.shevchenko.tictactoe.game.OnGameStateChangeListener;
 import ru.shevchenko.tictactoe.model.Cell;
 import ru.shevchenko.tictactoe.model.CellState;
+import ru.shevchenko.tictactoe.model.GameMode;
 import ru.shevchenko.tictactoe.model.GameStatus;
 import ru.shevchenko.tictactoe.model.Line;
 
@@ -28,6 +28,10 @@ public class GameActivity extends Activity {
     RelativeLayout baseLayout;
     @Bind(R.id.game_board_layout)
     GridLayout boardLayout;
+    @Bind(R.id.game_status)
+    TextView gameStatus;
+    @Bind(R.id.game_ai_start)
+    TextView letAiStart;
 
     private GameManager gameManager;
 
@@ -55,26 +59,27 @@ public class GameActivity extends Activity {
 
                 if (state.equals(CellState.X)) {
                     currentCellView.setText("X");
+                    gameStatus.setText("O turn...");
                 } else if (state.equals(CellState.O)) {
                     currentCellView.setText("O");
+                    gameStatus.setText("X turn...");
                 }
             }
 
             @Override
             public void win(GameStatus state, Line line) {
-                Toast.makeText(GameActivity.this, "" + state, Toast.LENGTH_LONG).show();
+                if (state.equals(GameStatus.X_WIN)) {
+                    gameStatus.setText("X player wins");
+                } else {
+                    gameStatus.setText("O player wins");
+                }
             }
 
             @Override
             public void draw() {
-                Toast.makeText(GameActivity.this, "Draw", Toast.LENGTH_LONG).show();
+                gameStatus.setText("Draw");
             }
         });
-    }
-
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
     }
 
     @OnClick({R.id.game_cell_1_1,
@@ -92,13 +97,38 @@ public class GameActivity extends Activity {
 
     @OnClick(R.id.game_new)
     void onNewGameStartPressed(View view) {
-        gameManager.startNewGame();
+        gameStatus.setText("");
+        gameManager.startNewGame(gameManager.getGameMode());
         clearBoard();
     }
 
     @OnClick(R.id.game_ai_start)
     void onAiStatClick(View view) {
+        clearBoard();
         gameManager.startAi();
+    }
+
+    @OnClick(R.id.game_change_mode)
+    void onGameModeChange(View view) {
+        TextView textView = (TextView) view;
+        gameStatus.setText("");
+        if (textView.getTag().equals("pvp")) {
+            textView.setTag("pvai");
+            textView.setText(R.string.pvai);
+            textView.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.r2d2, 0, 0);
+            letAiStart.setVisibility(View.GONE);
+
+            clearBoard();
+            gameManager.startNewGame(GameMode.PVP);
+        } else if (textView.getTag().equals("pvai")) {
+            textView.setTag("pvp");
+            textView.setText(R.string.pvp);
+            textView.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.group, 0, 0);
+            letAiStart.setVisibility(View.VISIBLE);
+
+            clearBoard();
+            gameManager.startNewGame(GameMode.VS_AI);
+        }
     }
 
     private void clearBoard() {

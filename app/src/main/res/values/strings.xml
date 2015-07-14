@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">TicTacToe</string>
+    <string name="restart">Restart Game</string>
+    <string name="let_ai_start">Let AI start</string>
+    <string name="pvp">Player vs Player</string>
+    <string name="pvai">Player vs AI</string>
 </resources>
