@@ -118,6 +118,9 @@ public class GameActivity extends Activity {
 
     @OnClick(R.id.game_ai_start)
     void onAiStatClick(View view) {
+        if (!gameManager.getCurrentGameStatus().equals(GameStatus.NOT_STARTED)) {
+            return;
+        }
         clearBoard();
         gameManager.startAi();
     }

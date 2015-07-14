@@ -103,6 +103,10 @@ public class GameManager {
         return gameMode;
     }
 
+    public GameStatus getCurrentGameStatus() {
+        return currentStatus;
+    }
+
     public CellState getAiSeed() {
         return aiPlayer.getAiSeed();
     }
