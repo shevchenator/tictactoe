@@ -86,8 +86,4 @@ public class Board {
     public int hashCode() {
         return cellMap != null ? cellMap.hashCode() : 0;
     }
-
-    public Board clone() {
-        return new Board(new HashMap<>(this.cellMap));
-    }
 }

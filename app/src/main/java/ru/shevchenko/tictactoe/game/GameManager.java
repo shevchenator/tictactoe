@@ -42,7 +42,7 @@ public class GameManager {
     }
 
     public void makeMove(Cell cell) {
-        if (!isGameOver() &&
+        if (!currentStatus.isGameOver() &&
                 !areMovesBlocked &&
                 board.getCellState(cell).equals(CellState.BLANK)) {
             if (previousTurnState.equals(CellState.O) && board.place(CellState.X, cell)) {
@@ -56,7 +56,7 @@ public class GameManager {
             currentStatus = statusProcessor.checkGameStatus();
             reactOnStatusChange();
 
-            if (aiPlayer != null && !isGameOver() && !previousTurnState.equals(aiPlayer.getAiSeed())) {
+            if (aiPlayer != null && !currentStatus.isGameOver() && !previousTurnState.equals(aiPlayer.getAiSeed())) {
                 areMovesBlocked = true;
                 aiPlayer.chooseMove(board, new AiPlayer.OnMoveChooseListener() {
                     @Override
@@ -77,12 +77,6 @@ public class GameManager {
                 makeMove(cell);
             }
         });
-    }
-
-    private boolean isGameOver() {
-        return currentStatus.equals(GameStatus.X_WIN) ||
-                currentStatus.equals(GameStatus.O_WIN) ||
-                currentStatus.equals(GameStatus.DRAW);
     }
 
     private void reactOnStatusChange() {

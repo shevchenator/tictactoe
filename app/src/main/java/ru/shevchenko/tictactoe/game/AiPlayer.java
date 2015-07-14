@@ -55,8 +55,9 @@ public class AiPlayer {
     }
 
     private int minMax(Board board, int depth, CellState currentMove, int alpha, int beta) {
-        if (isGameOver(board)) {
-            return calculateScore(board, depth);
+        GameStatus currentStatus = getGameStatusForBoard(board);
+        if (currentStatus.isGameOver()) {
+            return calculateScore(currentStatus, depth);
         }
 
         Cell bestMove = null;
@@ -81,25 +82,16 @@ public class AiPlayer {
         return currentMove.equals(aiSeed) ? alpha : beta;
     }
 
-    private boolean isGameOver(Board board) {
+    private GameStatus getGameStatusForBoard(Board board) {
         GameStatusProcessor statusProcessor = new GameStatusProcessor(board);
-        GameStatus gameStatus = statusProcessor.checkGameStatus();
-
-        return gameStatus.equals(GameStatus.X_WIN) ||
-                gameStatus.equals(GameStatus.O_WIN) ||
-                gameStatus.equals(GameStatus.DRAW);
+        return statusProcessor.checkGameStatus();
     }
 
-    private int calculateScore(Board board, int depth) {
-        GameStatusProcessor statusProcessor = new GameStatusProcessor(board);
-        GameStatus gameStatus = statusProcessor.checkGameStatus();
-
+    private int calculateScore(GameStatus gameStatus, int depth) {
         if (gameStatus.equals(GameStatus.DRAW)) {
             return 0;
         } else {
-            CellState winnerState = statusProcessor.getWinnerState();
-
-            if (winnerState.equals(aiSeed)) {
+            if (gameStatus.toWinnerState().equals(aiSeed)) {
                 return AiPlayer.WIN_SCORE - depth;
             } else {
                 return depth - AiPlayer.WIN_SCORE;
