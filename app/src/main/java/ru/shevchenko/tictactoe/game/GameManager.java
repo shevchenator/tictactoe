@@ -49,14 +49,14 @@ public class GameManager {
             reactOnStatusChange();
 
             if (!previousTurnState.equals(aiPlayer.getAiSeed()) && !isGameOver()) {
-                makeMove(aiPlayer.makeMove(board).first);
+                makeMove(aiPlayer.makeMove(board));
             }
         }
     }
 
     public void startAi() {
         this.aiPlayer = new AiPlayer(CellState.X);
-        makeMove(aiPlayer.makeMove(board).first);
+        makeMove(aiPlayer.makeMove(board));
     }
 
     private boolean isGameOver() {

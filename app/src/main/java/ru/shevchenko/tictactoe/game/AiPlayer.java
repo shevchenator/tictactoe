@@ -1,7 +1,8 @@
 package ru.shevchenko.tictactoe.game;
 
-import android.util.Log;
-import android.util.Pair;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
 import ru.shevchenko.tictactoe.model.Board;
 import ru.shevchenko.tictactoe.model.Cell;
@@ -28,44 +29,39 @@ public class AiPlayer {
         }
     }
 
-    public Pair<Cell, CellState> makeMove(Board board) {
-        minMax(board.clone(), 0, aiSeed);
-        return new Pair<>(choice, aiSeed);
+    public Cell makeMove(Board board) {
+        if (board.isBlank() || board.getAvailablePlaces().size() == 8) {
+            return makeFistMove(board);
+        }
+
+        minMax(board.clone(), 0, aiSeed, -11, 11);
+        return choice;
     }
 
-    private int minMax(Board board, int depth, CellState currentMove) {
+    private int minMax(Board board, int depth, CellState currentMove, int alpha, int beta) {
         if (isGameOver(board)) {
             return calculateScore(board, depth);
         }
 
-        int bestSoFar;
         Cell bestMove = null;
-        if (currentMove.equals(aiSeed)) {
-            bestSoFar = -2;
-        } else {
-            bestSoFar = 2;
-        }
-
-//        Map<Cell, Integer> candidateMoves = new HashMap<>();
         for (Cell cell : board.getAvailablePlaces()) {
             Board clonedBoard = board.clone();
             clonedBoard.place(currentMove, cell);
-            int score = minMax(clonedBoard, depth + 1, currentMove.equals(aiSeed) ? opponentSeed : aiSeed);
-
-            if (depth == 0) {
-                Log.d("WTF", cell + " -> " + score + "\n");
+            int score = minMax(clonedBoard, depth + 1, currentMove.equals(aiSeed) ? opponentSeed : aiSeed, alpha, beta);
+            if (currentMove.equals(aiSeed) && score > alpha) {
+                alpha = score;
+                bestMove = cell;
+            } else if (currentMove.equals(opponentSeed) && score < beta) {
+                beta = score;
+                bestMove = cell;
             }
 
-            if (currentMove.equals(aiSeed) && score > bestSoFar) {
-                bestSoFar = score;
-                bestMove = cell;
-            } else if (currentMove.equals(opponentSeed) && score < bestSoFar) {
-                bestSoFar = score;
-                bestMove = cell;
+            if (alpha >= beta) {
+                break;
             }
         }
         choice = bestMove;
-        return bestSoFar;
+        return currentMove.equals(aiSeed) ? alpha : beta;
     }
 
     private boolean isGameOver(Board board) {
@@ -87,11 +83,32 @@ public class AiPlayer {
             CellState winnerState = statusProcessor.getWinnerState();
 
             if (winnerState.equals(aiSeed)) {
-                return 1;
+                return 10 - depth;
             } else {
-                return -1;
+                return depth - 10;
             }
         }
+    }
+
+    private Cell makeFistMove(Board board) {
+        List<Cell> cells = new ArrayList<>();
+        cells.add(new Cell(0, 0));
+        cells.add(new Cell(2, 0));
+        cells.add(new Cell(0, 2));
+        cells.add(new Cell(2, 2));
+        cells.add(new Cell(1, 1));
+        if (aiSeed.equals(CellState.O)) {
+            if (board.getCellState(new Cell(1,1)).equals(CellState.BLANK)) {
+                return new Cell(1,1);
+            }
+            for (Cell cell : cells) {
+                if (!board.getCellState(cell).equals(CellState.BLANK)) {
+                    cells.remove(cell);
+                    break;
+                }
+            }
+        }
+        return cells.get(new Random().nextInt(cells.size()));
     }
 
     public CellState getAiSeed() {
